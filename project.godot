@@ -10,7 +10,7 @@ config_version=4
 
 [application]
 
-config/name="Ld 51"
+config/name="LD53"
 run/main_scene="res://src/game/Game.tscn"
 config/icon="res://icon.png"
 
