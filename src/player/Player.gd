@@ -14,7 +14,8 @@ onready var coyote_jump_timer = $CoyoteJumpTimer
 onready var variable_jump_timer = $VariableJumpTimer
 onready var jump_buffer_timer = $JumpBufferTimer
 onready var force_move_x_timer = $ForceMoveXTimer
-onready var combo_reset_timer = $ComboResetTimer
+onready var pickup_area = $PickupArea
+onready var carry_position = $PickupArea/CarryPosition
 
 # player
 onready var sprite = $Sprite
@@ -38,7 +39,18 @@ export(int) var UPWARD_CORNER_CORRECTION = 4
 export(float) var CEILING_VARIABLE_JUMP = 0.05
 export(int) var FAST_FALL_MAX_SPEED = 240
 export(int) var FAST_FALL_MAX_ACCELERATION = 300
-export(Curve) var combo_ease
+export(int) var THROW_RECOIL = 80
+export(int) var GRAB_STAMINA = 110
+
+export(int) var CLIMB_CHECK_DISTANCE = 2
+export(int) var CLIMB_UP_CHECK_DISTANCE = 2
+export(int) var CLIMB_UP_SPEED = -45
+export(int) var CLIMB_DOWN_SPEED = 80
+export(int) var CLIMB_ACCEL = 800
+export(int) var CLIMB_UP_COST = 100 / 2.2
+export(int) var CLIMB_STILL_COST = 100 / 10
+export(int) var CLIMB_JUMP_COST = 110 / 4
+
 
 
 var WALL_SLIDE_TIME = 1.2
@@ -52,35 +64,19 @@ var was_on_floor = false
 var wall_slide_dir = NEUTRAL
 var wall_slide_timer = WALL_SLIDE_TIME
 var last_speed_y = 0
+var holding_box = null
+var prev_holder = null
+var holding_candidate = null
 
-var combo = -1
-var MAX_COMBO = 6.0
-var boost = 0
-
-onready var line = $Line2D
-
-func calc_trajectory(delta, line):
-	var points = []
-	var pos = position - global_position
-	var vel = motion
-
-	for i in range(80):
-		points.append(pos)
-		vel.y += GRAVITY * delta
-		pos += vel * delta
-	line.points = points
+var grab_stamina = GRAB_STAMINA
+var climb_dir = 0
+var is_climbing = false
 
 func _physics_process(delta: float):	
 	last_speed_y = motion.y
 	
-	calc_trajectory(delta, line)
-	
-	if Input.is_action_just_pressed("x"):
-		var l = Line2D.new()
-		l.width = 1
-		l.default_color = Color.from_hsv((randi() % 12) / 12.0, 1, 1)
-		calc_trajectory(delta, l)
-		global.add_on_main(l, global_position)
+	if is_on_floor():
+		grab_stamina = GRAB_STAMINA
 	
 	var input_vector = get_input_vector()
 	
@@ -95,11 +91,34 @@ func _physics_process(delta: float):
 	apply_vertical_force(input_vector, delta)
 	move(input_vector)
 	update_sprite(input_vector, delta)
+
+func _input(event):
+	if Input.is_action_just_pressed("throw"):
+		handle_box()
+		
+	if Input.is_action_pressed("up"):
+		climb_dir = -1
+	elif Input.is_action_just_released("up"):
+		if Input.is_action_pressed("down"):
+			climb_dir = 1
+		else:
+			climb_dir = 0
 	
+	if Input.is_action_pressed("down"):
+		climb_dir = 1
+	elif Input.is_action_just_released("down"):
+		if Input.is_action_pressed("up"):
+			climb_dir = -1
+		else:
+			climb_dir = 0
+		
 func update_facing(input_vector: Vector2) -> void:
 	var direction = sign(input_vector.x)
 	facing = direction if direction != 0 else facing
 	sprite.flip_h = true if facing == LEFT else false
+	
+	pickup_area.scale.x = facing
+	
 	
 func get_input_vector():
 	var input_vector = Vector2.ZERO
@@ -139,13 +158,37 @@ func apply_vertical_force(input_vector: Vector2, delta: float) -> void:
 			if motion.y >= 0 and wall_slide_timer > 0 and collide_check(facing):
 				wall_slide_dir = facing
 		
-		# if we are wall sliding we want to fall a bit slower
-		if wall_slide_dir != NEUTRAL:
-			maximum = lerp(max_fall, WALL_SLIDE_START_MAX, wall_slide_timer / WALL_SLIDE_TIME)
+			# if we are wall sliding we want to fall a bit slower
+			if wall_slide_dir != NEUTRAL:
+				maximum = lerp(max_fall, WALL_SLIDE_START_MAX, wall_slide_timer / WALL_SLIDE_TIME)
 	
-	
-		var fall_multiplier = 0.5 if abs(motion.y) < HALF_GRAVITY_THRESHOLD and Input.is_action_pressed("jump") else 1.0
-		motion.y = move_toward(motion.y, maximum, GRAVITY * fall_multiplier * delta)
+		if (
+			Input.is_action_pressed("grab") and
+			can_climb_wall(facing) and
+			grab_stamina > 0
+		):
+			is_climbing = true
+			var target = 0
+			if climb_dir == -1:
+				target = CLIMB_UP_SPEED
+				grab_stamina -= CLIMB_UP_COST * delta
+			elif climb_dir == 1:
+				target = CLIMB_DOWN_SPEED
+			else:
+				grab_stamina -= CLIMB_STILL_COST * delta
+				
+			if grab_stamina <= 40:
+				
+				# rumble light warning here
+				pass
+			elif grab_stamina <= 20:
+				# rumble strong warning here
+				pass
+			
+			motion.y = move_toward(motion.y, target, CLIMB_ACCEL * delta)
+		else:
+			var fall_multiplier = 0.5 if abs(motion.y) < HALF_GRAVITY_THRESHOLD and Input.is_action_pressed("jump") else 1.0
+			motion.y = move_toward(motion.y, maximum, GRAVITY * fall_multiplier * delta)
 	
 	if wall_slide_dir != NEUTRAL:
 		wall_slide_timer = max(wall_slide_timer - delta, 0)
@@ -164,50 +207,59 @@ func apply_vertical_force(input_vector: Vector2, delta: float) -> void:
 			jump_buffer_timer.start()
 			
 			if can_wall_jump(RIGHT):
-				wall_jump(LEFT)
+				if facing == RIGHT and Input.is_action_pressed("grab") and grab_stamina > 0 and can_climb_wall(facing):
+					climb_jump(input_vector)
+				else:
+					wall_jump(LEFT)
 			elif can_wall_jump(LEFT):
-				wall_jump(RIGHT)
+				if facing == LEFT and Input.is_action_pressed("grab") and grab_stamina > 0 and can_climb_wall(facing):
+					climb_jump(input_vector)
+				else:	
+					wall_jump(RIGHT)
 
 func jump(input_vector: Vector2) -> void:
 	coyote_jump_timer.stop()
 	variable_jump_timer.start()
 	wall_slide_timer = WALL_SLIDE_TIME
 	
-	boost = input_vector.x * combo_ease.interpolate(combo/MAX_COMBO)
-	
-	motion.x += input_vector.x * JUMP_HORIZONTAL_BOOST + boost
+	motion.x += input_vector.x * JUMP_HORIZONTAL_BOOST
 	motion.y = JUMP_FORCE
 	variable_jump_speed = motion.y
 	
 	sprite.scale = Vector2(0.6, 1.4)
-	
-	if input_vector.x != NEUTRAL:
-		combo = min(combo + 1, MAX_COMBO)
-		combo_reset_timer.stop()
 
+func climb_jump(input_vector: Vector2) -> void:
+	if not is_on_floor():
+		grab_stamina -= CLIMB_JUMP_COST
+	
+	jump(input_vector)
+	
+	if facing == RIGHT:
+		# render jump right animation
+		pass
+	else:
+		# render jump left animation
+		pass
+	
 func wall_jump(direction: int) -> void:
 	coyote_jump_timer.stop()
 	variable_jump_timer.start()
 	wall_slide_timer = WALL_SLIDE_TIME
-	
-	boost = direction * combo_ease.interpolate(combo / MAX_COMBO)
 		
 	if sign(motion.x) != 0:
 		force_move_x_direction = direction
 		force_move_x_timer.start()
 
-	motion.x = direction * WALL_JUMP_HORIZONTAL_BOOST + boost
+	motion.x = direction * WALL_JUMP_HORIZONTAL_BOOST
 	motion.y = JUMP_FORCE
 	variable_jump_speed = motion.y
 	
 	sprite.scale = Vector2(0.6, 1.4)
-	combo = min(combo + 1, MAX_COMBO)
-	combo_reset_timer.stop()
 	
 func move(input_vector: Vector2) -> void:
 	was_on_floor = is_on_floor()
 	
-	motion = move_and_slide(motion, Vector2.UP)
+	motion = move_and_slide(motion, Vector2.UP, false, 4, PI/4, false)
 	
 	if not was_on_floor and is_on_floor():
 		var squish_amount = min(last_speed_y / FAST_FALL_MAX_SPEED, 1)
@@ -221,10 +273,7 @@ func move(input_vector: Vector2) -> void:
 		if jump_buffer_timer.time_left > 0:
 			jump_buffer_timer.stop()
 			jump(input_vector)
-		else:
-			if combo_reset_timer.is_stopped():
-				combo_reset_timer.start(0.1)
-			
+
 	if is_on_ceiling():
 		if motion.x <= 0:
 			for i in range(1, UPWARD_CORNER_CORRECTION + 1):
@@ -250,6 +299,9 @@ func update_sprite(_input_vector: Vector2, delta: float) -> void:
 func can_wall_jump(direction: int) -> bool:
 	return test_move(get_transform(), Vector2(WALL_CHECK_DISTANCE * direction, 0))
 	
+func can_climb_wall(direction: int) -> bool:
+	return holding_box == null and test_move(get_transform(), Vector2(CLIMB_CHECK_DISTANCE * direction, 0))
+	
 func collide_check(x: int = 0, y: int = 0) -> bool:
 	return test_move(get_transform(), Vector2(x, y))
 
@@ -268,5 +320,33 @@ func update_camera(room):
 func _on_RoomDetector_area_entered(room: Area2D):
 	update_camera(room)
 
-func _on_ComboResetTimer_timeout():
-	combo = max(-1, combo - 2)
+func handle_box():
+	# pickup
+	if holding_box == null:
+		if holding_candidate == null:
+			return
+		
+		holding_box = holding_candidate
+		
+		holding_box.pickup()
+		holding_box.position = Vector2.ZERO
+		prev_holder = holding_box.get_parent()
+		prev_holder.remove_child(holding_box)
+		carry_position.add_child(holding_box)
+	else:
+	# throw
+		carry_position.remove_child(holding_box)
+		prev_holder.add_child(holding_box)
+		holding_box.position = carry_position.global_position
+		holding_box.throw(Vector2(-facing, 0))
+		holding_box = null
+		
+		motion.x += THROW_RECOIL * (-facing)
+
+func _on_PickupArea_body_entered(body: PhysicsBody2D):
+	if body.is_in_group("carryable"):
+		holding_candidate = body
+
+func _on_PickupArea_body_exited(body):
+	if body.is_in_group("carryable"):
+		holding_candidate = null
