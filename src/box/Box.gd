@@ -5,8 +5,8 @@ export(int) var DAMPING = 0.7
 export(int) var RUN_ACCELERATION = 1000
 export(int) var RUN_FRICTION = 400
 export(int) var RUN_MAX_SPEED = 90
-export(int) var JUMP_FORCE = -205
-export(int) var MAX_SPEED = 200
+export(int) var JUMP_FORCE = -105
+export(int) var MAX_SPEED = 400
 
 var held := false
 var motion = Vector2.ZERO
@@ -30,6 +30,7 @@ func _physics_process(delta):
 		
 func apply_horizontal_force(delta: float) -> void:
 	motion.x = lerp(motion.x, 0, (RUN_MAX_SPEED / RUN_FRICTION))
+	motion.x = clamp(motion.x, -MAX_SPEED, MAX_SPEED)
 
 func apply_vertical_force(delta: float) -> void:
 	if not is_on_floor():
@@ -40,7 +41,6 @@ func pickup():
 		return
 	
 	held = true
-	set_process(false)
 	set_collision_layer_bit(1, false)
 	set_collision_mask_bit(1, false)
 	
@@ -49,10 +49,8 @@ func throw(impulse = Vector2.ZERO):
 		return
 		
 	held = false
-	set_process(true)
-	
-	motion += motion
-	
+
+#	motion += impulse
 	motion.x += sign(impulse.x) * 300
 	motion.y += JUMP_FORCE
 	set_collision_layer_bit(1, true)

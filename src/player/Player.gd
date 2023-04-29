@@ -16,6 +16,7 @@ onready var jump_buffer_timer = $JumpBufferTimer
 onready var force_move_x_timer = $ForceMoveXTimer
 onready var pickup_area = $PickupArea
 onready var carry_position = $PickupArea/CarryPosition
+onready var grab_timer = $GrabTimer
 
 # player
 onready var sprite = $Sprite
@@ -93,7 +94,8 @@ func _physics_process(delta: float):
 	update_sprite(input_vector, delta)
 
 func _input(event):
-	if Input.is_action_just_pressed("throw"):
+	if Input.is_action_just_pressed("throw") and grab_timer.time_left == 0:
+		grab_timer.start()
 		handle_box()
 		
 	if Input.is_action_pressed("up"):
