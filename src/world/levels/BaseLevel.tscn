@@ -23,7 +23,7 @@ __meta__ = {
 }
 
 [node name="Goal" parent="." instance=ExtResource( 2 )]
-position = Vector2( 284, 176 )
+position = Vector2( 286, 176 )
 __meta__ = {
 "_edit_group_": true
 }

@@ -8,7 +8,7 @@ extents = Vector2( 5, 6.5 )
 
 [node name="Goal" type="Area2D"]
 collision_layer = 0
-collision_mask = 5
+collision_mask = 13
 script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
@@ -19,4 +19,5 @@ texture = ExtResource( 1 )
 position = Vector2( 1, -6.5 )
 shape = SubResource( 1 )
 
+[connection signal="area_entered" from="." to="." method="_on_Goal_area_entered"]
 [connection signal="body_entered" from="." to="." method="_on_Goal_body_entered"]

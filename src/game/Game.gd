@@ -7,8 +7,6 @@ func _ready():
 	global.change_scene(starting_level)
 
 func _process(_delta: float) -> void:
-	
-		
 	if Input.is_action_just_pressed("ui_fullscreen"):
 		OS.window_fullscreen = !OS.window_fullscreen
 
