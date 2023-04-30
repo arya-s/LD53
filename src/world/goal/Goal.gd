@@ -16,6 +16,7 @@ func change_level(body):
 		get_parent().goal_audio.play()
 		get_parent().box.set_physics_process(false)
 		get_parent().player.set_physics_process(false)
+		get_parent().player.animation_player.stop()
 		animated_sparks.play("default")
 		
 		yield(get_tree().create_timer(1.0), 'timeout')

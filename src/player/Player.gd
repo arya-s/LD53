@@ -24,6 +24,8 @@ onready var throw_position_left = $ThrowPositionLeft
 onready var sprite = $Sprite
 onready var jump_audio = $JumpAudio
 onready var land_audio = $LandAudio
+onready var animation_player = $AnimationPlayer
+onready var stamina_animation_player = $StaminaAnimationPlayer
 
 export(float) var AIR_MULTIPLIER = 0.65
 export(int) var GRAVITY = 900
@@ -44,7 +46,7 @@ export(int) var UPWARD_CORNER_CORRECTION = 4
 export(float) var CEILING_VARIABLE_JUMP = 0.05
 export(int) var FAST_FALL_MAX_SPEED = 240
 export(int) var FAST_FALL_MAX_ACCELERATION = 300
-export(int) var THROW_RECOIL = 80
+export(int) var THROW_RECOIL = 100
 export(int) var GRAB_STAMINA = 110
 
 export(int) var CLIMB_CHECK_DISTANCE = 2
@@ -76,6 +78,7 @@ var holding_candidate = null
 var grab_stamina = GRAB_STAMINA
 var climb_dir = 0
 var is_climbing = false
+var is_sweating = false
 
 func _physics_process(delta: float):
 	last_speed_y = motion.y
@@ -83,6 +86,8 @@ func _physics_process(delta: float):
 	if is_on_floor():
 		State.last_save_position = global_position
 		grab_stamina = GRAB_STAMINA
+		is_sweating = false
+		stamina_animation_player.play("RESET")
 	
 	var input_vector = get_input_vector()
 	
@@ -95,6 +100,7 @@ func _physics_process(delta: float):
 	update_facing(input_vector)
 	apply_horizontal_force(input_vector, delta)
 	apply_vertical_force(input_vector, delta)
+	update_animations(input_vector)
 	move(input_vector)
 	update_sprite(input_vector, delta)
 	
@@ -129,7 +135,22 @@ func update_facing(input_vector: Vector2) -> void:
 	
 	pickup_area.scale.x = facing
 	
-	
+func update_animations(input_vector):
+	if is_climbing:
+		if input_vector.y != 0:
+			animation_player.play("climbing")
+		else:
+			animation_player.play("climbing_idle")
+	else:
+		if input_vector.x != 0 and sign(input_vector.y) == 0:
+			animation_player.play("run")
+		else:
+			animation_player.play("idle")
+		
+		# jumping
+		if sign(motion.y) == -1:
+			animation_player.play("default")
+
 func get_input_vector():
 	var input_vector = Vector2.ZERO
 	input_vector.x = Input.get_action_strength("right") - Input.get_action_strength("left")
@@ -186,19 +207,22 @@ func apply_vertical_force(input_vector: Vector2, delta: float) -> void:
 				target = CLIMB_DOWN_SPEED
 			else:
 				grab_stamina -= CLIMB_STILL_COST * delta
-				
-			if grab_stamina <= 40:
-				
-				# rumble light warning here
-				pass
-			elif grab_stamina <= 20:
-				# rumble strong warning here
-				pass
+			
+			if grab_stamina <= 20:
+				Controls.rumble_gamepad(Controls.RumbleStrength.Light, Controls.RumbleLength.Short)
+				stamina_animation_player.play("stamina_warning_quick")
+			elif grab_stamina <= 40:
+				Controls.rumble_gamepad(Controls.RumbleStrength.Light, Controls.RumbleLength.Short)
+				stamina_animation_player.play("stamina_warning")
+			else:
+				stamina_animation_player.play("RESET")
 			
 			motion.y = move_toward(motion.y, target, CLIMB_ACCEL * delta)
 		else:
 			var fall_multiplier = 0.5 if abs(motion.y) < HALF_GRAVITY_THRESHOLD and Input.is_action_pressed("jump") else 1.0
 			motion.y = move_toward(motion.y, maximum, GRAVITY * fall_multiplier * delta)
+			stamina_animation_player.play("RESET")
+			is_climbing = false
 	
 	if wall_slide_dir != NEUTRAL:
 		wall_slide_timer = max(wall_slide_timer - delta, 0)
@@ -278,9 +302,15 @@ func move(input_vector: Vector2) -> void:
 	# thus retriggering the landing
 	if not was_on_floor and is_on_floor() and last_speed_y > 1:
 		var squish_amount = min(last_speed_y / FAST_FALL_MAX_SPEED, 1)
-		sprite.scale.x = lerp(1, 1.6, squish_amount)
+		sprite.scale.x = lerp(1, 1.5, squish_amount)
 		sprite.scale.y = lerp(1, 0.4, squish_amount)
 		land_audio.play()
+		
+		if last_speed_y > 200:
+			# hard squish landing
+			Controls.rumble_gamepad(Controls.RumbleStrength.Strong, Controls.RumbleLength.VeryShort)
+		else:
+			Controls.rumble_gamepad(Controls.RumbleStrength.Light, Controls.RumbleLength.VeryShort)
 	
 	if is_on_floor():
 		wall_slide_timer = WALL_SLIDE_TIME
@@ -373,7 +403,8 @@ func handle_box():
 			
 		holding_box = null
 		
-#		motion.x += THROW_RECOIL * (-facing)
+		motion.x += THROW_RECOIL * (-facing)
+		Controls.rumble_gamepad(Controls.RumbleStrength.Light, Controls.RumbleLength.VeryShort)
 
 func _on_PickupArea_area_entered(area):
 	var body = area.get_parent()
