@@ -1,5 +1,12 @@
 extends Node
 
+func _process(_delta: float) -> void:
+	if Input.is_action_just_pressed("ui_fullscreen"):
+		OS.window_fullscreen = !OS.window_fullscreen
+
+	if Input.is_action_just_pressed("reset"):
+		global.reset_scene()
+
 func instance_scene_on_main(scene, position):
 	var main = get_tree().current_scene
 	var instance = scene.instance()

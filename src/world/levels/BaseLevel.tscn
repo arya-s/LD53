@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://src/box/Box.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/world/goal/Goal.tscn" type="PackedScene" id=2]
@@ -6,6 +6,10 @@
 [ext_resource path="res://src/player/Player.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/world/levels/Level.gd" type="Script" id=5]
 [ext_resource path="res://src/world/levels/RoomShape.tscn" type="PackedScene" id=6]
+[ext_resource path="res://static/sounds/goal.wav" type="AudioStream" id=7]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 25, 97 )
 
 [node name="BaseLevel" type="Node"]
 script = ExtResource( 5 )
@@ -36,3 +40,30 @@ position = Vector2( 24, 157 )
 __meta__ = {
 "_edit_group_": true
 }
+
+[node name="BoxBoundLeft" type="StaticBody2D" parent="."]
+position = Vector2( -8, 0 )
+collision_layer = 16
+collision_mask = 4
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BoxBoundLeft"]
+position = Vector2( -15, 87 )
+shape = SubResource( 1 )
+
+[node name="BoxBoundRight" type="StaticBody2D" parent="."]
+position = Vector2( 360, 0 )
+collision_layer = 16
+collision_mask = 4
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BoxBoundRight"]
+position = Vector2( -15, 87 )
+shape = SubResource( 1 )
+
+[node name="GoalAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 7 )

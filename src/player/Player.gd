@@ -22,6 +22,8 @@ onready var throw_position_left = $ThrowPositionLeft
 
 # player
 onready var sprite = $Sprite
+onready var jump_audio = $JumpAudio
+onready var land_audio = $LandAudio
 
 export(float) var AIR_MULTIPLIER = 0.65
 export(int) var GRAVITY = 900
@@ -95,6 +97,9 @@ func _physics_process(delta: float):
 	apply_vertical_force(input_vector, delta)
 	move(input_vector)
 	update_sprite(input_vector, delta)
+	
+	position.x = clamp(position.x, 4, 320 - 4)
+	position.y = clamp(position.y, 8, 240)
 
 func _input(event):
 	if Input.is_action_just_pressed("throw") and grab_timer.time_left == 0:
@@ -232,6 +237,7 @@ func jump(input_vector: Vector2) -> void:
 	variable_jump_speed = motion.y
 	
 	sprite.scale = Vector2(0.6, 1.4)
+	jump_audio.play()
 
 func climb_jump(input_vector: Vector2) -> void:
 	if not is_on_floor():
@@ -260,16 +266,21 @@ func wall_jump(direction: int) -> void:
 	variable_jump_speed = motion.y
 	
 	sprite.scale = Vector2(0.6, 1.4)
+	jump_audio.play()
 	
 func move(input_vector: Vector2) -> void:
 	was_on_floor = is_on_floor()
 	
 	motion = move_and_slide(motion, Vector2.UP, false, 4, PI/4, false)
-	
-	if not was_on_floor and is_on_floor():
+
+	# we use 1 here because landing on another kinematic body
+	# and walking around has a small amount of last_speed_y left
+	# thus retriggering the landing
+	if not was_on_floor and is_on_floor() and last_speed_y > 1:
 		var squish_amount = min(last_speed_y / FAST_FALL_MAX_SPEED, 1)
 		sprite.scale.x = lerp(1, 1.6, squish_amount)
 		sprite.scale.y = lerp(1, 0.4, squish_amount)
+		land_audio.play()
 	
 	if is_on_floor():
 		wall_slide_timer = WALL_SLIDE_TIME

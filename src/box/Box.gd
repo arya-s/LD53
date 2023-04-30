@@ -8,13 +8,19 @@ export(int) var RUN_MAX_SPEED = 90
 export(int) var JUMP_FORCE = -65
 export(int) var MAX_SPEED = 400
 
-var held := false
+
+onready var landing_audio = $LandingAudio
+
+var held = false
 var motion = Vector2.ZERO
 var facing = 0
+var was_on_floor = false
 
 func _physics_process(delta):
 	if held:
 		return
+		
+	was_on_floor = _is_on_floor()
 		
 	if test_move(get_transform(), Vector2.DOWN):
 		set_collision_mask_bit(0, true)
@@ -31,9 +37,19 @@ func _physics_process(delta):
 	if collision:
 		var velocity = collision.remainder.bounce(collision.normal)
 		motion = motion.bounce(collision.normal) * DAMPING
-		move_and_collide(velocity * delta)
-
+		var rest_collision = move_and_collide(velocity * delta)
 		
+			
+	if hit_wall(-1) or hit_wall(1) or (not was_on_floor and _is_on_floor()):
+		landing_audio.play()
+					
+func _is_on_floor():
+	return test_move(get_transform(), Vector2.DOWN)
+	
+func hit_wall(direction: int):
+	var collision = move_and_collide(Vector2(direction, 0), true, true, true)
+	return collision and not collision.collider.is_in_group("player")
+
 func apply_horizontal_force(delta: float) -> void:
 	motion.x = lerp(motion.x, 0, (RUN_MAX_SPEED / RUN_FRICTION))
 	motion.x = clamp(motion.x, -MAX_SPEED, MAX_SPEED)
