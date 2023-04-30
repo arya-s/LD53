@@ -17,6 +17,8 @@ onready var force_move_x_timer = $ForceMoveXTimer
 onready var pickup_area = $PickupArea
 onready var carry_position = $PickupArea/CarryPosition
 onready var grab_timer = $GrabTimer
+onready var throw_position_right = $ThrowPositionRight
+onready var throw_position_left = $ThrowPositionLeft
 
 # player
 onready var sprite = $Sprite
@@ -73,10 +75,11 @@ var grab_stamina = GRAB_STAMINA
 var climb_dir = 0
 var is_climbing = false
 
-func _physics_process(delta: float):	
+func _physics_process(delta: float):
 	last_speed_y = motion.y
 	
 	if is_on_floor():
+		State.last_save_position = global_position
 		grab_stamina = GRAB_STAMINA
 	
 	var input_vector = get_input_vector()
@@ -309,6 +312,9 @@ func collide_check(x: int = 0, y: int = 0) -> bool:
 
 func corner_check(x: int) -> bool:
 	return test_move(get_transform().translated(Vector2(x, 0)), Vector2.UP)
+	
+func is_next_to_wall(direction: int, distance: int) -> bool:
+	return collide_check(direction * distance, 0)
 
 func update_camera(room):
 	var collider = room.get_node("Collider")
@@ -339,16 +345,29 @@ func handle_box():
 	# throw
 		carry_position.remove_child(holding_box)
 		prev_holder.add_child(holding_box)
-		holding_box.position = carry_position.global_position
-		holding_box.throw(Vector2(-facing, 0))
+		
+		if is_next_to_wall(LEFT, 10):
+			holding_box.throw(Vector2.RIGHT)
+			holding_box.position = throw_position_right.global_position
+		elif is_next_to_wall(RIGHT, 10):
+			holding_box.throw(Vector2.LEFT)
+			holding_box.position = throw_position_left.global_position
+		else:
+			if facing == LEFT:
+				holding_box.throw(Vector2.LEFT)
+				holding_box.position = throw_position_left.global_position
+			elif facing == RIGHT:
+				holding_box.throw(Vector2.RIGHT)
+				holding_box.position = throw_position_right.global_position
+			
 		holding_box = null
 		
-		motion.x += THROW_RECOIL * (-facing)
+#		motion.x += THROW_RECOIL * (-facing)
 
-func _on_PickupArea_body_entered(body: PhysicsBody2D):
-	if body.is_in_group("carryable"):
-		holding_candidate = body
+func _on_PickupArea_area_entered(area):
+	var body = area.get_parent()
+	holding_candidate = body
 
-func _on_PickupArea_body_exited(body):
-	if body.is_in_group("carryable"):
-		holding_candidate = null
+
+func _on_PickupArea_area_exited(area):
+	holding_candidate = null

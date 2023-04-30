@@ -12,8 +12,8 @@ extents = Vector2( 3.5, 5.5 )
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 7, 5.5 )
 
-[node name="Player" type="KinematicBody2D"]
-collision_mask = 2
+[node name="Player" type="KinematicBody2D" groups=["player"]]
+collision_mask = 6
 script = ExtResource( 2 )
 
 [node name="Camera" type="Camera2D" parent="."]
@@ -57,7 +57,7 @@ wait_time = 0.16
 one_shot = true
 
 [node name="GrabTimer" type="Timer" parent="."]
-wait_time = 0.2
+wait_time = 0.16
 one_shot = true
 
 [node name="Label" type="Label" parent="."]
@@ -77,15 +77,22 @@ collision_mask = 64
 position = Vector2( 0, -5.5 )
 shape = SubResource( 2 )
 
+[node name="ThrowPositionRight" type="Position2D" parent="."]
+position = Vector2( 7, -3 )
+
+[node name="ThrowPositionLeft" type="Position2D" parent="."]
+position = Vector2( -8, -3 )
+
 [node name="PickupArea" type="Area2D" parent="."]
+collision_mask = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PickupArea"]
 position = Vector2( 3, -5.5 )
 shape = SubResource( 3 )
 
 [node name="CarryPosition" type="Position2D" parent="PickupArea"]
-position = Vector2( 7, -6 )
+position = Vector2( 8, -3 )
 
 [connection signal="area_entered" from="RoomDetector" to="." method="_on_RoomDetector_area_entered"]
-[connection signal="body_entered" from="PickupArea" to="." method="_on_PickupArea_body_entered"]
-[connection signal="body_exited" from="PickupArea" to="." method="_on_PickupArea_body_exited"]
+[connection signal="area_entered" from="PickupArea" to="." method="_on_PickupArea_area_entered"]
+[connection signal="area_exited" from="PickupArea" to="." method="_on_PickupArea_area_exited"]

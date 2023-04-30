@@ -2,10 +2,10 @@ extends KinematicBody2D
 
 export(int) var GRAVITY = 900
 export(int) var DAMPING = 0.7
-export(int) var RUN_ACCELERATION = 1000
+export(int) var RUN_ACCELERATION = 100
 export(int) var RUN_FRICTION = 400
 export(int) var RUN_MAX_SPEED = 90
-export(int) var JUMP_FORCE = -105
+export(int) var JUMP_FORCE = -65
 export(int) var MAX_SPEED = 400
 
 var held := false
@@ -16,6 +16,12 @@ func _physics_process(delta):
 	if held:
 		return
 		
+	if test_move(get_transform(), Vector2.DOWN):
+		set_collision_mask_bit(0, true)
+		set_collision_mask_bit(1, true)
+		set_collision_layer_bit(2, true)
+
+
 	facing = sign(motion.x)
 	
 	apply_horizontal_force(delta)
@@ -41,18 +47,17 @@ func pickup():
 		return
 	
 	held = true
-	set_collision_layer_bit(1, false)
+	set_collision_mask_bit(0, false)
 	set_collision_mask_bit(1, false)
+	set_collision_mask_bit(2, false)
+	
+	set_collision_layer_bit(2, false)
 	
 func throw(impulse = Vector2.ZERO):
 	if not held:
 		return
 		
 	held = false
-
-#	motion += impulse
-	motion.x += sign(impulse.x) * 300
+	motion.x += sign(impulse.x) * 240
 	motion.y += JUMP_FORCE
-	set_collision_layer_bit(1, true)
 	set_collision_mask_bit(1, true)
-	

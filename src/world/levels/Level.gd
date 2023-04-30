@@ -1,13 +1,8 @@
 extends Node
 
 onready var player = $Player
-onready var label = $UI/Label
-
-var last_update = 0
+onready var box = $Box
 
 func _process(delta):
-	if last_update > 2:
-		label.text = str(player.motion.x)
-		last_update += 0
-	else:
-		last_update += delta
+	if player.position.y > 200 or box.position.y > 200:
+		global.reset_scene()
