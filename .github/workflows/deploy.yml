@@ -43,7 +43,7 @@ jobs:
           butlerApiKey: ${{ secrets.BUTLER_KEY }}
           gameData: ./bin/win/win.zip
           itchUsername: arya-s
-          itchGameId: ld53
+          itchGameId: postman
           buildChannel: windows
 
       - name: Archive the builds
