@@ -8,21 +8,11 @@
 [node name="SolidTilemap" parent="." index="0"]
 tile_data = PoolIntArray( 2, 0, 0, 3, 0, 0, 38, 0, 0, 39, 0, 0, 65538, 0, 0, 65539, 0, 0, 65574, 0, 0, 65575, 0, 0, 131074, 0, 0, 131075, 0, 0, 196610, 0, 0, 196611, 0, 0, 262146, 0, 0, 262147, 0, 0, 262177, 0, 0, 262178, 0, 0, 327682, 0, 0, 327683, 0, 0, 327696, 0, 0, 327697, 0, 0, 327698, 0, 0, 327699, 0, 0, 327700, 0, 0, 327701, 0, 0, 327702, 0, 0, 327713, 0, 0, 327714, 0, 0, 393218, 0, 0, 393219, 0, 0, 393249, 0, 0, 393250, 0, 0, 458754, 0, 0, 458755, 0, 0, 458785, 0, 0, 458786, 0, 0, 524290, 0, 0, 524291, 0, 0, 524321, 0, 0, 524322, 0, 0, 524326, 0, 0, 524327, 0, 0, 589826, 0, 0, 589827, 0, 0, 589857, 0, 0, 589858, 0, 0, 589862, 0, 0, 589863, 0, 0, 655362, 0, 0, 655363, 0, 0, 655388, 0, 0, 655389, 0, 0, 655390, 0, 0, 655391, 0, 0, 655392, 0, 0, 655393, 0, 0, 655394, 0, 0, 720898, 0, 0, 720899, 0, 0, 720913, 0, 0, 720914, 0, 0, 720915, 0, 0, 720916, 0, 0, 720917, 0, 0, 720918, 0, 0, 720919, 0, 0, 720920, 0, 0, 720924, 0, 0, 720925, 0, 0, 720926, 0, 0, 720927, 0, 0, 720928, 0, 0, 720929, 0, 0, 720930, 0, 0, 786434, 0, 0, 786435, 0, 0, 786449, 0, 0, 786450, 0, 0, 786451, 0, 0, 786452, 0, 0, 786453, 0, 0, 786454, 0, 0, 786465, 0, 0, 786466, 0, 0, 851970, 0, 0, 851971, 0, 0, 851981, 0, 0, 851982, 0, 0, 851983, 0, 0, 851984, 0, 0, 851985, 0, 0, 851986, 0, 0, 852001, 0, 0, 852002, 0, 0, 917506, 0, 0, 917507, 0, 0, 917517, 0, 0, 917518, 0, 0, 917519, 0, 0, 917520, 0, 0, 917521, 0, 0, 917537, 0, 0, 917538, 0, 0, 983042, 0, 0, 983043, 0, 0, 983073, 0, 0, 983074, 0, 0, 1048578, 0, 0, 1048579, 0, 0, 1048609, 0, 0, 1048610, 0, 0, 1114145, 0, 0, 1114146, 0, 0, 1245190, 0, 0, 1245191, 0, 0, 1310726, 0, 0, 1310727, 0, 0, 1376262, 0, 0, 1376263, 0, 0, 1376264, 0, 0, 1376265, 0, 0, 1376266, 0, 0, 1376267, 0, 0, 1376268, 0, 0, 1376279, 0, 0, 1376280, 0, 0, 1376281, 0, 0, 1376282, 0, 0, 1376283, 0, 0, 1376284, 0, 0, 1376287, 0, 0, 1376288, 0, 0, 1376289, 0, 0, 1376290, 0, 0, 1376291, 0, 0, 1376292, 0, 0, 1376293, 0, 0, 1376294, 0, 0, 1376295, 0, 0, 1441798, 0, 0, 1441799, 0, 0, 1441800, 0, 0, 1441801, 0, 0, 1441802, 0, 0, 1441803, 0, 0, 1441804, 0, 0, 1441815, 0, 0, 1441816, 0, 0, 1441817, 0, 0, 1441818, 0, 0, 1441819, 0, 0, 1441820, 0, 0, 1441823, 0, 0, 1441824, 0, 0, 1441825, 0, 0, 1441826, 0, 0, 1441827, 0, 0, 1441828, 0, 0, 1441829, 0, 0, 1441830, 0, 0, 1441831, 0, 0 )
 
-[node name="Box" parent="." index="1"]
-position = Vector2( 272, 152 )
-
-[node name="Goal" parent="." index="2"]
-position = Vector2( 156, 40 )
-next_level = "res://src/world/levels/Level_08.tscn"
-
-[node name="Player" parent="." index="4"]
-position = Vector2( 304, 152 )
-
-[node name="Blank" parent="." index="8"]
+[node name="Blank" parent="." index="1"]
 position = Vector2( 284, 176 )
 scale = Vector2( 8.75, 1.75 )
 
-[node name="Blank4" type="Sprite" parent="." index="9"]
+[node name="Blank4" type="Sprite" parent="." index="2"]
 position = Vector2( 24, 66 )
 scale = Vector2( 1.75, 17.25 )
 texture = ExtResource( 2 )
@@ -32,7 +22,7 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Blank5" type="Sprite" parent="." index="10"]
+[node name="Blank5" type="Sprite" parent="." index="3"]
 position = Vector2( 272, 88 )
 scale = Vector2( 1.75, 13.75 )
 texture = ExtResource( 2 )
@@ -42,7 +32,7 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Blank6" type="Sprite" parent="." index="11"]
+[node name="Blank6" type="Sprite" parent="." index="4"]
 position = Vector2( 245.875, 88 )
 scale = Vector2( 5.21875, 1.75 )
 texture = ExtResource( 2 )
@@ -52,7 +42,7 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Blank7" type="Sprite" parent="." index="12"]
+[node name="Blank7" type="Sprite" parent="." index="5"]
 position = Vector2( 208, 176 )
 scale = Vector2( 5.75, 1.75 )
 texture = ExtResource( 2 )
@@ -62,7 +52,7 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Blank8" type="Sprite" parent="." index="13"]
+[node name="Blank8" type="Sprite" parent="." index="6"]
 position = Vector2( 76, 176 )
 scale = Vector2( 6.75, 1.75 )
 texture = ExtResource( 2 )
@@ -72,7 +62,7 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Blank11" type="Sprite" parent="." index="14"]
+[node name="Blank11" type="Sprite" parent="." index="7"]
 position = Vector2( 124, 112 )
 scale = Vector2( 4.75, 1.75 )
 texture = ExtResource( 2 )
@@ -82,7 +72,7 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Blank12" type="Sprite" parent="." index="15"]
+[node name="Blank12" type="Sprite" parent="." index="8"]
 position = Vector2( 164, 96 )
 scale = Vector2( 4.75, 1.75 )
 texture = ExtResource( 2 )
@@ -92,7 +82,7 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Blank13" type="Sprite" parent="." index="16"]
+[node name="Blank13" type="Sprite" parent="." index="9"]
 position = Vector2( 191, 92 )
 scale = Vector2( 2, 0.749999 )
 texture = ExtResource( 2 )
@@ -102,7 +92,7 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Blank14" type="Sprite" parent="." index="17"]
+[node name="Blank14" type="Sprite" parent="." index="10"]
 position = Vector2( 156, 44 )
 scale = Vector2( 6.75, 0.749999 )
 texture = ExtResource( 2 )
@@ -112,7 +102,7 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Blank9" type="Sprite" parent="." index="18"]
+[node name="Blank9" type="Sprite" parent="." index="11"]
 position = Vector2( 56, 163 )
 scale = Vector2( 1.75, 2.5 )
 texture = ExtResource( 2 )
@@ -122,7 +112,7 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Blank10" type="Sprite" parent="." index="19"]
+[node name="Blank10" type="Sprite" parent="." index="12"]
 position = Vector2( 144, 100 )
 scale = Vector2( 1.75, 2.75 )
 texture = ExtResource( 2 )
@@ -132,7 +122,7 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Blank15" type="Sprite" parent="." index="20"]
+[node name="Blank15" type="Sprite" parent="." index="13"]
 position = Vector2( 312, 72 )
 scale = Vector2( 1.75, 1.75 )
 texture = ExtResource( 2 )
@@ -142,7 +132,7 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Blank16" type="Sprite" parent="." index="21"]
+[node name="Blank16" type="Sprite" parent="." index="14"]
 position = Vector2( 312, 8 )
 scale = Vector2( 1.75, 1.75 )
 texture = ExtResource( 2 )
@@ -151,3 +141,13 @@ region_rect = Rect2( 0, 0, 8, 8 )
 __meta__ = {
 "_edit_group_": true
 }
+
+[node name="Box" parent="." index="15"]
+position = Vector2( 272, 152 )
+
+[node name="Goal" parent="." index="16"]
+position = Vector2( 156, 40 )
+next_level = "res://src/world/levels/Level_08.tscn"
+
+[node name="Player" parent="." index="18"]
+position = Vector2( 304, 152 )

@@ -19,17 +19,7 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Box" parent="." index="2"]
-position = Vector2( 256, 176 )
-
-[node name="Goal" parent="." index="3"]
-next_level = "res://src/world/levels/Level_04.tscn"
-
-[node name="Blank" parent="." index="9"]
-position = Vector2( 160, 136 )
-scale = Vector2( 5.75, 11.75 )
-
-[node name="Blank2" type="Sprite" parent="." index="10"]
+[node name="Blank2" type="Sprite" parent="." index="2"]
 position = Vector2( 69, 180 )
 scale = Vector2( 17, 0.75 )
 texture = ExtResource( 3 )
@@ -39,7 +29,7 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Blank3" type="Sprite" parent="." index="11"]
+[node name="Blank3" type="Sprite" parent="." index="3"]
 position = Vector2( 250, 180 )
 scale = Vector2( 17, 0.75 )
 texture = ExtResource( 3 )
@@ -49,7 +39,7 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Blank4" type="Sprite" parent="." index="12"]
+[node name="Blank4" type="Sprite" parent="." index="4"]
 position = Vector2( 183, 165 )
 scale = Vector2( 6, 3 )
 texture = ExtResource( 3 )
@@ -59,7 +49,7 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Blank5" type="Sprite" parent="." index="13"]
+[node name="Blank5" type="Sprite" parent="." index="5"]
 position = Vector2( 175, 141 )
 scale = Vector2( 6, 3 )
 texture = ExtResource( 3 )
@@ -69,7 +59,7 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Blank6" type="Sprite" parent="." index="14"]
+[node name="Blank6" type="Sprite" parent="." index="6"]
 position = Vector2( 167, 133 )
 scale = Vector2( 6, 3 )
 texture = ExtResource( 3 )
@@ -78,3 +68,13 @@ region_rect = Rect2( 0, 0, 8, 8 )
 __meta__ = {
 "_edit_group_": true
 }
+
+[node name="Blank" parent="." index="7"]
+position = Vector2( 160, 136 )
+scale = Vector2( 5.75, 11.75 )
+
+[node name="Box" parent="." index="8"]
+position = Vector2( 256, 176 )
+
+[node name="Goal" parent="." index="9"]
+next_level = "res://src/world/levels/Level_04.tscn"

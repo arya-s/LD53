@@ -19,14 +19,7 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Goal" parent="." index="3"]
-next_level = "res://src/world/levels/Level_05.tscn"
-
-[node name="Blank" parent="." index="9"]
-position = Vector2( 96, 69.5 )
-scale = Vector2( 1.75, 18.375 )
-
-[node name="Blank2" type="Sprite" parent="." index="10"]
+[node name="Blank2" type="Sprite" parent="." index="2"]
 position = Vector2( 160, 180 )
 scale = Vector2( 39.75, 0.75 )
 texture = ExtResource( 3 )
@@ -36,7 +29,7 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Blank3" type="Sprite" parent="." index="11"]
+[node name="Blank3" type="Sprite" parent="." index="3"]
 position = Vector2( 144, 117.5 )
 scale = Vector2( 1.75, 15.125 )
 texture = ExtResource( 3 )
@@ -45,3 +38,10 @@ region_rect = Rect2( 0, 0, 8, 8 )
 __meta__ = {
 "_edit_group_": true
 }
+
+[node name="Blank" parent="." index="4"]
+position = Vector2( 96, 69.5 )
+scale = Vector2( 1.75, 18.375 )
+
+[node name="Goal" parent="." index="6"]
+next_level = "res://src/world/levels/Level_05.tscn"
