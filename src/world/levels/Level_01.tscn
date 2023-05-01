@@ -25,8 +25,13 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Box" parent="." index="3"]
+[node name="Blank" parent="." index="3"]
+position = Vector2( 160, 180 )
+scale = Vector2( 318, 6 )
+region_rect = Rect2( 4, 3, 1, 1 )
+
+[node name="Box" parent="." index="4"]
 position = Vector2( 112, 160 )
 
-[node name="Goal" parent="." index="4"]
+[node name="Goal" parent="." index="5"]
 next_level = "res://src/world/levels/Level_02.tscn"

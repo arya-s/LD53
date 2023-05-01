@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://src/world/levels/BaseLevel.tscn" type="PackedScene" id=1]
 [ext_resource path="res://static/tutorial_sprites.png" type="Texture" id=2]
+[ext_resource path="res://static/blank.png" type="Texture" id=3]
 
 [node name="Level_04" instance=ExtResource( 1 )]
 
@@ -20,3 +21,27 @@ __meta__ = {
 
 [node name="Goal" parent="." index="3"]
 next_level = "res://src/world/levels/Level_05.tscn"
+
+[node name="Blank" parent="." index="9"]
+position = Vector2( 96, 69.5 )
+scale = Vector2( 1.75, 18.375 )
+
+[node name="Blank2" type="Sprite" parent="." index="10"]
+position = Vector2( 160, 180 )
+scale = Vector2( 39.75, 0.75 )
+texture = ExtResource( 3 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 8, 8 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Blank3" type="Sprite" parent="." index="11"]
+position = Vector2( 144, 117.5 )
+scale = Vector2( 1.75, 15.125 )
+texture = ExtResource( 3 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 8, 8 )
+__meta__ = {
+"_edit_group_": true
+}

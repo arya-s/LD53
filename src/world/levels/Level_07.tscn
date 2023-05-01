@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://src/world/levels/BaseLevel.tscn" type="PackedScene" id=1]
+[ext_resource path="res://static/blank.png" type="Texture" id=2]
 
 [node name="BaseLevel" instance=ExtResource( 1 )]
 
@@ -12,7 +13,141 @@ position = Vector2( 272, 152 )
 
 [node name="Goal" parent="." index="2"]
 position = Vector2( 156, 40 )
-next_level = "res://src/world/levels/Level_01.tscn"
+next_level = "res://src/world/levels/Level_08.tscn"
 
 [node name="Player" parent="." index="4"]
 position = Vector2( 304, 152 )
+
+[node name="Blank" parent="." index="8"]
+position = Vector2( 284, 176 )
+scale = Vector2( 8.75, 1.75 )
+
+[node name="Blank4" type="Sprite" parent="." index="9"]
+position = Vector2( 24, 66 )
+scale = Vector2( 1.75, 17.25 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 8, 8 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Blank5" type="Sprite" parent="." index="10"]
+position = Vector2( 272, 88 )
+scale = Vector2( 1.75, 13.75 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 8, 8 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Blank6" type="Sprite" parent="." index="11"]
+position = Vector2( 245.875, 88 )
+scale = Vector2( 5.21875, 1.75 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 8, 8 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Blank7" type="Sprite" parent="." index="12"]
+position = Vector2( 208, 176 )
+scale = Vector2( 5.75, 1.75 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 8, 8 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Blank8" type="Sprite" parent="." index="13"]
+position = Vector2( 76, 176 )
+scale = Vector2( 6.75, 1.75 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 8, 8 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Blank11" type="Sprite" parent="." index="14"]
+position = Vector2( 124, 112 )
+scale = Vector2( 4.75, 1.75 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 8, 8 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Blank12" type="Sprite" parent="." index="15"]
+position = Vector2( 164, 96 )
+scale = Vector2( 4.75, 1.75 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 8, 8 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Blank13" type="Sprite" parent="." index="16"]
+position = Vector2( 191, 92 )
+scale = Vector2( 2, 0.749999 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 8, 8 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Blank14" type="Sprite" parent="." index="17"]
+position = Vector2( 156, 44 )
+scale = Vector2( 6.75, 0.749999 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 8, 8 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Blank9" type="Sprite" parent="." index="18"]
+position = Vector2( 56, 163 )
+scale = Vector2( 1.75, 2.5 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 8, 8 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Blank10" type="Sprite" parent="." index="19"]
+position = Vector2( 144, 100 )
+scale = Vector2( 1.75, 2.75 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 8, 8 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Blank15" type="Sprite" parent="." index="20"]
+position = Vector2( 312, 72 )
+scale = Vector2( 1.75, 1.75 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 8, 8 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Blank16" type="Sprite" parent="." index="21"]
+position = Vector2( 312, 8 )
+scale = Vector2( 1.75, 1.75 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 8, 8 )
+__meta__ = {
+"_edit_group_": true
+}
