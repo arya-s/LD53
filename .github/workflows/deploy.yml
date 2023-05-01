@@ -34,7 +34,7 @@ jobs:
           butlerApiKey: ${{ secrets.BUTLER_KEY }}
           gameData: ./bin/web/web.zip
           itchUsername: arya-s
-          itchGameId: ld53
+          itchGameId: postman
           buildChannel: html5
 
       - name: Upload windows build to itch
