@@ -67,3 +67,4 @@ shape = SubResource( 1 )
 
 [node name="GoalAudio" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 7 )
+bus = "SFX"

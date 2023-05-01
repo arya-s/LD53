@@ -1,0 +1,40 @@
+[gd_resource type="Theme" load_steps=9 format=2]
+
+[ext_resource path="res://static/ui/default_font.tres" type="DynamicFont" id=1]
+[ext_resource path="res://src/ui/button_hovered.tres" type="StyleBox" id=2]
+[ext_resource path="res://src/ui/button_normal.tres" type="StyleBox" id=3]
+[ext_resource path="res://static/slider_icon.png" type="Texture" id=4]
+[ext_resource path="res://static/slider_grabber_icon.png" type="Texture" id=5]
+
+[sub_resource type="StyleBoxTexture" id=1]
+texture = ExtResource( 4 )
+region_rect = Rect2( 0, 0, 32, 1 )
+
+[sub_resource type="StyleBoxTexture" id=3]
+texture = ExtResource( 4 )
+region_rect = Rect2( 0, 0, 32, 3 )
+
+[sub_resource type="StyleBoxTexture" id=2]
+texture = ExtResource( 4 )
+region_rect = Rect2( 0, 0, 32, 3 )
+
+[resource]
+default_font = ExtResource( 1 )
+Button/colors/font_color = Color( 0.0627451, 0.0431373, 0.152941, 1 )
+Button/colors/font_color_disabled = Color( 0.0627451, 0.0431373, 0.152941, 1 )
+Button/colors/font_color_focus = Color( 0.0627451, 0.0431373, 0.152941, 1 )
+Button/colors/font_color_hover = Color( 0.0627451, 0.0431373, 0.152941, 1 )
+Button/colors/font_color_pressed = Color( 0.0627451, 0.0431373, 0.152941, 1 )
+Button/constants/hseparation = 2
+Button/styles/disabled = null
+Button/styles/focus = null
+Button/styles/hover = ExtResource( 2 )
+Button/styles/normal = ExtResource( 3 )
+Button/styles/pressed = ExtResource( 2 )
+HSlider/icons/grabber = ExtResource( 5 )
+HSlider/icons/grabber_disabled = ExtResource( 5 )
+HSlider/icons/grabber_highlight = ExtResource( 5 )
+HSlider/icons/tick = ExtResource( 5 )
+HSlider/styles/grabber_area = SubResource( 1 )
+HSlider/styles/grabber_area_highlight = SubResource( 3 )
+HSlider/styles/slider = SubResource( 2 )

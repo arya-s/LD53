@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/postman_2.mp3-d9ec1fa901a81c611136529913ca578c.mp3str"
+
+[deps]
+
+source_file="res://static/postman_2.mp3"
+dest_files=[ "res://.import/postman_2.mp3-d9ec1fa901a81c611136529913ca578c.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

@@ -1,10 +1,12 @@
 extends Node
 
+var in_menu = true
+
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("ui_fullscreen"):
 		OS.window_fullscreen = !OS.window_fullscreen
 
-	if Input.is_action_just_pressed("reset"):
+	if Input.is_action_just_pressed("reset") and not in_menu:
 		global.reset_scene()
 
 func instance_scene_on_main(scene, position):

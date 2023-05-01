@@ -1,0 +1,8 @@
+[gd_resource type="DynamicFont" load_steps=2 format=2]
+
+[ext_resource path="res://static/ui/HopeGold.ttf" type="DynamicFontData" id=1]
+
+[resource]
+outline_color = Color( 0.231373, 0.203922, 0.180392, 1 )
+extra_spacing_top = -2
+font_data = ExtResource( 1 )

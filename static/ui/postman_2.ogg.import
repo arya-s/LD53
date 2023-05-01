@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/postman_2.ogg-4dd6909f6aefcc240f5199c27f9ebcbe.oggstr"
+
+[deps]
+
+source_file="res://static/ui/postman_2.ogg"
+dest_files=[ "res://.import/postman_2.ogg-4dd6909f6aefcc240f5199c27f9ebcbe.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0
