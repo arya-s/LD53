@@ -408,7 +408,8 @@ func handle_box():
 
 func _on_PickupArea_area_entered(area):
 	var body = area.get_parent()
-	holding_candidate = body
+	if body.is_in_group("carryable"):
+		holding_candidate = body
 
 
 func _on_PickupArea_area_exited(area):
