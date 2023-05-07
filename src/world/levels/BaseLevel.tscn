@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://src/box/Box.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/world/goal/Goal.tscn" type="PackedScene" id=2]
@@ -7,7 +7,6 @@
 [ext_resource path="res://src/world/levels/Level.gd" type="Script" id=5]
 [ext_resource path="res://src/world/levels/RoomShape.tscn" type="PackedScene" id=6]
 [ext_resource path="res://static/sounds/goal.wav" type="AudioStream" id=7]
-[ext_resource path="res://static/blank.png" type="Texture" id=8]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 25, 97 )
@@ -16,16 +15,8 @@ extents = Vector2( 25, 97 )
 script = ExtResource( 5 )
 
 [node name="SolidTilemap" parent="." instance=ExtResource( 3 )]
-tile_data = PoolIntArray( 1441792, 0, 0, 1441793, 0, 0, 1441794, 0, 0, 1441795, 0, 0, 1441796, 0, 0, 1441797, 0, 0, 1441798, 0, 0, 1441799, 0, 0, 1441800, 0, 0, 1441801, 0, 0, 1441802, 0, 0, 1441803, 0, 0, 1441804, 0, 0, 1441805, 0, 0, 1441806, 0, 0, 1441807, 0, 0, 1441808, 0, 0, 1441809, 0, 0, 1441810, 0, 0, 1441811, 0, 0, 1441812, 0, 0, 1441813, 0, 0, 1441814, 0, 0, 1441815, 0, 0, 1441816, 0, 0, 1441817, 0, 0, 1441818, 0, 0, 1441819, 0, 0, 1441820, 0, 0, 1441821, 0, 0, 1441822, 0, 0, 1441823, 0, 0, 1441824, 0, 0, 1441825, 0, 0, 1441826, 0, 0, 1441827, 0, 0, 1441828, 0, 0, 1441829, 0, 0, 1441830, 0, 0, 1441831, 0, 0 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="Blank" type="Sprite" parent="."]
-position = Vector2( 104, 72 )
-texture = ExtResource( 8 )
-region_enabled = true
-region_rect = Rect2( 0, 0, 8, 8 )
+collision_mask = 5
+tile_data = PoolIntArray( 1507327, 1, 6, 1441792, 1, 2, 1441793, 1, 2, 1441794, 1, 2, 1441795, 1, 2, 1441796, 1, 2, 1441797, 1, 2, 1441798, 1, 2, 1441799, 1, 2, 1441800, 1, 2, 1441801, 1, 2, 1441802, 1, 2, 1441803, 1, 2, 1441804, 1, 2, 1441805, 1, 2, 1441806, 1, 2, 1441807, 1, 2, 1441808, 1, 2, 1441809, 1, 2, 1441810, 1, 2, 1441811, 1, 2, 1441812, 1, 2, 1441813, 1, 2, 1441814, 1, 2, 1441815, 1, 2, 1441816, 1, 2, 1441817, 1, 2, 1441818, 1, 2, 1441819, 1, 2, 1441820, 1, 2, 1441821, 1, 2, 1441822, 1, 2, 1441823, 1, 2, 1441824, 1, 2, 1441825, 1, 2, 1441826, 1, 2, 1441827, 1, 2, 1441828, 1, 2, 1441829, 1, 2, 1441830, 1, 2, 1441831, 1, 2, 1441832, 1, 5 )
 __meta__ = {
 "_edit_group_": true
 }
