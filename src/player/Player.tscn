@@ -232,6 +232,10 @@ one_shot = true
 wait_time = 0.16
 one_shot = true
 
+[node name="ClimbHopForceTimer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
 [node name="GrabTimer" type="Timer" parent="."]
 wait_time = 0.16
 one_shot = true

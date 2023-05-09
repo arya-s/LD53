@@ -14,6 +14,8 @@ onready var coyote_jump_timer = $CoyoteJumpTimer
 onready var variable_jump_timer = $VariableJumpTimer
 onready var jump_buffer_timer = $JumpBufferTimer
 onready var force_move_x_timer = $ForceMoveXTimer
+onready var climb_hop_force_timer = $ClimbHopForceTimer
+
 onready var pickup_area = $PickupArea
 onready var carry_position = $PickupArea/CarryPosition
 onready var grab_timer = $GrabTimer
@@ -26,6 +28,7 @@ onready var jump_audio = $JumpAudio
 onready var land_audio = $LandAudio
 onready var animation_player = $AnimationPlayer
 onready var stamina_animation_player = $StaminaAnimationPlayer
+onready var collider = $Collider
 
 export(float) var AIR_MULTIPLIER = 0.65
 export(int) var GRAVITY = 900
@@ -57,7 +60,8 @@ export(int) var CLIMB_ACCEL = 800
 export(int) var CLIMB_UP_COST = 100 / 2.2
 export(int) var CLIMB_STILL_COST = 100 / 10
 export(int) var CLIMB_JUMP_COST = 110 / 4
-
+export(int) var CLIMB_HOP_X = 80
+export(int) var CLIMB_HOP_Y = -80
 
 
 var WALL_SLIDE_TIME = 1.2
@@ -144,7 +148,7 @@ func update_animations(input_vector):
 		else:
 			animation_player.play("climbing_idle")
 	else:
-		if input_vector.x != 0 and sign(input_vector.y) == 0:
+		if input_vector.x != 0:
 			animation_player.play("run")
 		else:
 			animation_player.play("idle")
@@ -200,26 +204,30 @@ func apply_vertical_force(input_vector: Vector2, delta: float) -> void:
 			can_climb_wall(facing) and
 			grab_stamina > 0
 		):
-			is_climbing = true
-			var target = 0
-			if climb_dir == -1:
-				target = CLIMB_UP_SPEED
-				grab_stamina -= CLIMB_UP_COST * delta
-			elif climb_dir == 1:
-				target = CLIMB_DOWN_SPEED
+			if not is_grabbing_wall(facing):
+				climb_hop()
+				is_climbing = false
 			else:
-				grab_stamina -= CLIMB_STILL_COST * delta
-			
-			if grab_stamina <= 20:
-				Controls.rumble_gamepad(Controls.RumbleStrength.Light, Controls.RumbleLength.Short)
-				stamina_animation_player.play("stamina_warning_quick")
-			elif grab_stamina <= 40:
-				Controls.rumble_gamepad(Controls.RumbleStrength.Light, Controls.RumbleLength.Short)
-				stamina_animation_player.play("stamina_warning")
-			else:
-				stamina_animation_player.play("RESET")
-			
-			motion.y = move_toward(motion.y, target, CLIMB_ACCEL * delta)
+				is_climbing = true
+				var target = 0
+				if climb_dir == -1:
+					target = CLIMB_UP_SPEED
+					grab_stamina -= CLIMB_UP_COST * delta
+				elif climb_dir == 1:
+					target = CLIMB_DOWN_SPEED
+				else:
+					grab_stamina -= CLIMB_STILL_COST * delta
+				
+				if grab_stamina <= 20:
+					Controls.rumble_gamepad(Controls.RumbleStrength.Light, Controls.RumbleLength.Short)
+					stamina_animation_player.play("stamina_warning_quick")
+				elif grab_stamina <= 40:
+					Controls.rumble_gamepad(Controls.RumbleStrength.Light, Controls.RumbleLength.Short)
+					stamina_animation_player.play("stamina_warning")
+				else:
+					stamina_animation_player.play("RESET")
+				
+				motion.y = move_toward(motion.y, target, CLIMB_ACCEL * delta)
 		else:
 			var fall_multiplier = 0.5 if abs(motion.y) < HALF_GRAVITY_THRESHOLD and Input.is_action_pressed("jump") else 1.0
 			motion.y = move_toward(motion.y, maximum, GRAVITY * fall_multiplier * delta)
@@ -260,6 +268,22 @@ func jump(input_vector: Vector2) -> void:
 	
 	motion.x += input_vector.x * JUMP_HORIZONTAL_BOOST
 	motion.y = JUMP_FORCE
+	variable_jump_speed = motion.y
+	
+	sprite.scale = Vector2(0.6, 1.4)
+	jump_audio.play()
+	
+func climb_hop() -> void:
+	coyote_jump_timer.stop()
+	variable_jump_timer.start()
+	wall_slide_timer = WALL_SLIDE_TIME
+	
+	force_move_x_direction = facing
+	force_move_x_timer.start()
+
+	motion.x = facing * CLIMB_HOP_X
+	motion.y = CLIMB_HOP_Y
+	
 	variable_jump_speed = motion.y
 	
 	sprite.scale = Vector2(0.6, 1.4)
@@ -349,7 +373,10 @@ func can_wall_jump(direction: int) -> bool:
 	
 func can_climb_wall(direction: int) -> bool:
 	return holding_box == null and test_move(get_transform(), Vector2(CLIMB_CHECK_DISTANCE * direction, 0))
-	
+
+func is_grabbing_wall(direction: int) -> bool:
+	return can_climb_wall(direction) and test_move(get_transform().translated(Vector2(0, -collider.shape.extents.y)), Vector2(CLIMB_CHECK_DISTANCE * direction, 0))
+
 func collide_check(x: int = 0, y: int = 0) -> bool:
 	return test_move(get_transform(), Vector2(x, y))
 
