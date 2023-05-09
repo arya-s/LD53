@@ -104,6 +104,8 @@ func _physics_process(delta: float):
 	move(input_vector)
 	update_sprite(input_vector, delta)
 	
+	motion = motion.limit_length(90 + 140)
+	
 	position.x = clamp(position.x, 4, 320 - 4)
 	position.y = clamp(position.y, 8, 240)
 

@@ -37,9 +37,14 @@ func _physics_process(delta):
 	if collision:
 		var velocity = collision.remainder.bounce(collision.normal)
 		motion = motion.bounce(collision.normal) * DAMPING
-		var rest_collision = move_and_collide(velocity * delta)
 		
-			
+		if collision.collider is StaticBody2D:
+			velocity += collision.collider.constant_linear_velocity
+		
+		var rest_collision = move_and_collide(velocity * delta)
+		if rest_collision and rest_collision.collider is StaticBody2D:
+			velocity += collision.collider.constant_linear_velocity
+	
 	if hit_wall(-1) or hit_wall(1) or (not was_on_floor and _is_on_floor()):
 		landing_audio.play()
 					
@@ -48,7 +53,7 @@ func _is_on_floor():
 	
 func hit_wall(direction: int):
 	var collision = move_and_collide(Vector2(direction, 0), true, true, true)
-	return collision and not collision.collider.is_in_group("player")
+	return collision and not collision.collider.is_in_group("player") and not collision.collider is StaticBody2D
 
 func apply_horizontal_force(delta: float) -> void:
 	motion.x = lerp(motion.x, 0, (RUN_MAX_SPEED / RUN_FRICTION))
